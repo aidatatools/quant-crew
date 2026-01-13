@@ -1,0 +1,115 @@
+# AI Agent Configuration
+
+# LLM Settings
+llm:
+  model: "gpt-4o"
+  temperature: 0.7
+  max_tokens: 4000
+  timeout: 60
+
+# Agent Configurations
+agents:
+  market_intelligence:
+    role: "Market Intelligence Officer"
+    max_iterations: 3
+    verbose: true
+    allow_delegation: true
+    tools:
+      - yahoo_finance
+      - news_scraper
+    backstory: |
+      You are an experienced market data analyst specializing in extracting
+      key financial information from multiple data sources. Your reports are
+      always accurate, timely, and well-structured.
+
+  quant_strategist:
+    role: "Quantitative Strategist"
+    max_iterations: 2
+    verbose: true
+    allow_delegation: false
+    tools:
+      - technical_analyzer
+      - backtest
+    indicators:
+      - MA5
+      - MA20
+      - MA60
+      - RSI14
+      - MACD
+      - BOLLINGER
+    backstory: |
+      You are a quantitative trading expert proficient in technical indicator
+      analysis. You use mathematical models and statistical methods to identify
+      trading opportunities.
+
+  sentiment_analyst:
+    role: "Sentiment Analyst"
+    max_iterations: 3
+    verbose: true
+    allow_delegation: true
+    tools:
+      - news_sentiment
+      - text_analyzer
+    backstory: |
+      You are a sentiment analysis expert who excels at interpreting market
+      emotions from news and social media. You can identify trending topics
+      and gauge overall market sentiment.
+
+  risk_officer:
+    role: "Risk Compliance Officer"
+    max_iterations: 2
+    verbose: true
+    allow_delegation: false
+    challenge_threshold: 0.7  # Probability threshold for triggering revision
+    max_revisions: 2
+    tools:
+      - risk_assessment
+    backstory: |
+      You are a rigorous risk management expert known for "challenging everything".
+      Your responsibility is to question other analysts' conclusions and identify
+      risks they may have overlooked. You never easily approve any investment
+      recommendation.
+
+  cio:
+    role: "Chief Investment Officer"
+    max_iterations: 1
+    verbose: true
+    allow_delegation: true
+    tools:
+      - summarization
+    backstory: |
+      You are the Chief Investment Officer responsible for integrating all
+      analyses and producing final investment recommendations. Your decisions
+      are based on comprehensive consideration of all factors and are clear
+      and actionable.
+
+# Workflow Configuration
+workflow:
+  # LangGraph settings
+  max_iterations: 5
+  timeout_seconds: 600
+
+  # Risk officer challenge behavior
+  risk_challenge:
+    enabled: true
+    auto_retry: true
+    max_retries: 2
+
+  # Human-in-the-loop
+  human_review:
+    enabled: true
+    timeout_minutes: 60
+    auto_approve_after_timeout: false
+
+# LangSmith Tracing
+langsmith:
+  enabled: true
+  project_name: "quant-research-warroom"
+  tracing: true
+
+# Cost Management
+cost_management:
+  max_cost_per_report: 10.0  # USD
+  alert_threshold: 5.0  # USD
+  enable_caching: true
+  cache_ttl_hours: 24

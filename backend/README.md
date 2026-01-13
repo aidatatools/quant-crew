@@ -1,73 +1,212 @@
-# FastAPI Backend
+# 🎯 Quant-Crew Backend - AI Investment Research War Room
 
-A modern FastAPI backend application with PostgreSQL and async support, managed with `uv`.
+An AI-powered investment research system that generates comprehensive weekly intelligence reports using multi-agent collaboration (CrewAI + LangGraph).
 
-## Features
+## 🌟 What is Quant-Crew?
 
-- FastAPI framework with async/await support
-- PostgreSQL database with SQLAlchemy 2.0
-- Pydantic v2 for data validation
-- Alembic for database migrations
-- Environment-based configuration
-- CORS middleware
-- API versioning
-- Health check endpoints
-- Dependency management with `uv`
+Quant-Crew simulates a professional investment research team with 5 specialized AI agents:
+- **Market Intelligence Officer**: Data collection from Yahoo Finance & news sources
+- **Quantitative Strategist**: Technical analysis (RSI, MACD, Bollinger Bands, etc.)
+- **Sentiment Analyst**: News sentiment analysis and trend detection
+- **Risk Compliance Officer**: Adversarial review and risk assessment
+- **Chief Investment Officer**: Final synthesis and recommendations
 
-## Setup
+The system uses **iterative refinement** where the Risk Officer can challenge findings and trigger re-analysis, ensuring high-quality investment insights.
+
+## 📚 Documentation
+
+**👉 [Start here: Documentation Index](docs/INDEX.md)**
+
+### Quick Links
+- 🚀 [Quick Start Guide](docs/QUICKSTART.md) - Get running in 15 minutes
+- 🏗️ [Implementation Plan](docs/IMPLEMENTATION_PLAN.md) - Architecture & roadmap
+- 🤖 [Agents Overview](docs/AGENTS_OVERVIEW.md) - Deep dive into AI agents
+
+### Key Features
+
+- **Multi-Agent System**: 5 specialized AI agents working in collaboration
+- **Iterative Refinement**: Risk-based challenge and revision loops
+- **Technical Analysis**: Built-in TA-Lib indicators (MA, RSI, MACD, etc.)
+- **Sentiment Analysis**: News and market sentiment scoring
+- **Automated Reports**: Weekly PDF reports with charts
+- **LangSmith Integration**: Full observability and cost tracking
+- **REST API**: FastAPI with async support
+- **Modern Stack**: FastAPI, PostgreSQL, SQLAlchemy 2.0, managed with `uv`
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
 - Python 3.11+
 - [uv](https://github.com/astral-sh/uv) package manager
-- PostgreSQL (optional, for database features)
+- PostgreSQL (optional, for data persistence)
+- OpenAI API Key
+- LangSmith API Key (optional, for monitoring)
 
 ### Installation
 
-The project uses `uv` for dependency management. The Taskfile automates the setup:
-
-1. Initialize the project and install dependencies:
 ```bash
-task setup:backend
-```
+# 1. Install dependencies
+cd backend
+uv sync
 
-This will:
-- Create a virtual environment
-- Install all dependencies from pyproject.toml
-- Generate a uv.lock file
-
-2. Copy environment file and configure:
-```bash
+# 2. Configure environment
 cp .env.example .env
-# Edit .env with your configuration
-```
+# Edit .env and add your API keys
 
-3. Run database migrations (if using PostgreSQL):
-```bash
-cd backend
-uv run alembic upgrade head
-```
-
-### Running the Application
-
-Using the Taskfile (recommended):
-```bash
-task run:backend
-```
-
-Or manually with uv:
-```bash
-cd backend
+# 3. Run the application
 uv run uvicorn main:app --reload
 ```
 
-The API will be available at http://localhost:8000
+Visit http://localhost:8000/docs for interactive API documentation.
 
-### API Documentation
+**👉 For detailed setup instructions, see [QUICKSTART.md](docs/QUICKSTART.md)**
 
-Once running, access the interactive API documentation:
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+## 💡 Example Usage
+
+### Generate Stock Analysis
+```bash
+curl -X POST "http://localhost:8000/api/v1/analysis/stock" \
+  -H "Content-Type: application/json" \
+  -d '{"symbol": "2330.TW"}'
+```
+
+### Generate Weekly Report
+```bash
+curl -X POST "http://localhost:8000/api/v1/reports/generate" \
+  -H "Content-Type: application/json" \
+  -d '{"stocks": ["2330.TW", "NVDA", "AAPL"]}'
+```
+
+### Via Python
+```python
+from app.workflows.research_workflow import ResearchWorkflow
+
+workflow = ResearchWorkflow()
+result = workflow.analyze_stock("2330.TW")
+print(result)
+```
+
+## 📊 Weekly Report Output
+
+The system generates comprehensive reports including:
+- **Executive Summary**: CIO's integrated analysis
+- **Individual Stock Deep Dives**:
+  - Market intelligence (price, volume, news)
+  - Technical analysis (indicators, signals, entry/exit points)
+  - Sentiment analysis (news sentiment, trending topics)
+  - Risk assessment (identified risks, stress tests)
+  - Investment rating and strategy
+- **Market Focus**: Industry trends, upcoming events
+- **Agent Statistics**: Token usage, execution metrics
+
+**Example**: See [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) for sample report format.
+
+## 🏗️ Architecture
+
+```
+User Request
+     ↓
+Market Intelligence Officer (data collection)
+     ↓
+[Parallel Analysis]
+├─ Quantitative Strategist (technical)
+├─ Sentiment Analyst (sentiment)
+     ↓
+Risk Compliance Officer (challenge & validate)
+     ↓
+[Decision: Pass or Revise?]
+     ↓
+Chief Investment Officer (synthesis)
+     ↓
+Final Report (PDF + Email)
+```
+
+**Details**: See [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) and [AGENTS_OVERVIEW.md](docs/AGENTS_OVERVIEW.md)
+
+## 🛠️ Technology Stack
+
+### AI/ML
+- **CrewAI**: Multi-agent orchestration
+- **LangGraph**: Workflow state management
+- **LangChain**: LLM interactions
+- **LangSmith**: Observability & tracing
+- **OpenAI GPT-4o**: LLM backend
+
+### Data & Analysis
+- **yfinance**: Yahoo Finance API
+- **TA-Lib**: Technical indicators
+- **pandas/numpy**: Data processing
+
+### Backend
+- **FastAPI**: REST API framework
+- **PostgreSQL**: Database
+- **SQLAlchemy 2.0**: ORM
+- **Alembic**: Migrations
+- **Pydantic v2**: Validation
+
+## 📁 Project Structure
+
+```
+backend/
+├── app/
+│   ├── agents/              # 🤖 AI agent implementations
+│   │   ├── market_intelligence.py
+│   │   ├── quant_strategist.py
+│   │   ├── sentiment_analyst.py
+│   │   ├── risk_officer.py
+│   │   └── cio.py
+│   ├── workflows/           # 🔄 LangGraph orchestration
+│   │   └── research_workflow.py
+│   ├── tools/               # 🛠️ Data collection tools
+│   │   ├── yahoo_finance_tool.py
+│   │   ├── news_scraper.py
+│   │   ├── ta_analyzer.py
+│   │   └── risk_assessment.py
+│   ├── services/            # 💼 Business logic
+│   │   ├── report_service.py
+│   │   └── chart_service.py
+│   ├── models/              # 🗄️ Database models
+│   ├── schemas/             # 📋 API schemas
+│   └── api/v1/endpoints/    # 🌐 REST endpoints
+├── config/                  # ⚙️ Configuration
+│   ├── stock_watchlist.yaml
+│   └── agent_config.yaml
+├── docs/                    # 📚 Documentation
+│   ├── INDEX.md
+│   ├── QUICKSTART.md
+│   ├── IMPLEMENTATION_PLAN.md
+│   └── AGENTS_OVERVIEW.md
+├── outputs/                 # 📊 Generated reports
+│   ├── weekly_reports/
+│   └── charts/
+└── scripts/                 # 🔧 Utility scripts
+```
+
+## ⚙️ Configuration
+
+### Stock Watchlist
+Edit [app/config/stock_watchlist.yaml](app/config/stock_watchlist.yaml):
+```yaml
+stocks:
+  taiwan:
+    - symbol: "2330.TW"
+      name: "TSMC"
+  us:
+    - symbol: "NVDA"
+      name: "NVIDIA"
+```
+
+### Agent Behavior
+Edit [app/config/agent_config.yaml](app/config/agent_config.yaml):
+```yaml
+agents:
+  risk_officer:
+    challenge_threshold: 0.7  # Adjust strictness
+    max_revisions: 2
+```
+
+**See [QUICKSTART.md](docs/QUICKSTART.md) for full configuration options.**
 
 ## Development
 
@@ -177,22 +316,145 @@ backend/
 └── README.md
 ```
 
-## API Endpoints
+## 🌐 API Endpoints
 
-### Health Check
-- `GET /api/v1/health` - Health check endpoint
+### Reports
+- `POST /api/v1/reports/generate` - Generate weekly report
+- `GET /api/v1/reports` - List all reports
+- `GET /api/v1/reports/{id}` - Get report details
+- `GET /api/v1/reports/{id}/pdf` - Download PDF
 
-### Items (Example CRUD)
-- `GET /api/v1/items` - List all items
-- `GET /api/v1/items/{id}` - Get item by ID
-- `POST /api/v1/items` - Create new item
-- `PUT /api/v1/items/{id}` - Update item
-- `DELETE /api/v1/items/{id}` - Delete item
+### Analysis
+- `POST /api/v1/analysis/stock` - Analyze single stock
+- `GET /api/v1/analysis/history/{symbol}` - Analysis history
 
-## Environment Variables
+### Ticker Data
+- `GET /api/v1/tickers/{symbol}` - Get stock data
+- `GET /api/v1/tickers/{symbol}/history` - Historical prices
 
-See [.env.example](.env.example) for all available configuration options.
+### Health
+- `GET /api/v1/health` - System health check
 
-Key variables:
-- `DATABASE_URL` - PostgreSQL connection string
-- `BACKEND_CORS_ORIGINS` - Allowed CORS origins
+**Interactive docs**: http://localhost:8000/docs
+
+## 📅 Automated Scheduling
+
+Schedule weekly report generation:
+
+```python
+# scripts/scheduler.py
+from apscheduler.schedulers.blocking import BlockingScheduler
+
+scheduler = BlockingScheduler()
+
+@scheduler.scheduled_job('cron', day_of_week='sun', hour=18)
+def weekly_report():
+    workflow = ResearchWorkflow()
+    workflow.run_weekly_analysis()
+
+scheduler.start()
+```
+
+Run with: `uv run python scripts/scheduler.py`
+
+**See [QUICKSTART.md](docs/QUICKSTART.md) → Scheduled Execution**
+
+## 💰 Cost Estimation
+
+**Per weekly report (10 stocks)**:
+- Market Intelligence: ~$1.50
+- Quant Analysis: ~$0.60
+- Sentiment Analysis: ~$1.60
+- Risk Review: ~$0.40
+- CIO Synthesis: ~$0.10
+- **Total: ~$4.20 USD**
+
+Monthly (4 reports): ~$16.80
+
+**Details**: See [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) → Cost Estimation
+
+## 🔍 Monitoring & Observability
+
+### LangSmith Integration
+All agent executions are traced in LangSmith:
+- Token usage per agent
+- Execution time
+- Decision rationale
+- Cost tracking
+
+Configure in `.env`:
+```bash
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_API_KEY=ls-your-key
+LANGCHAIN_PROJECT=quant-research-warroom
+```
+
+Visit https://smith.langchain.com/ to view traces.
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+uv run pytest
+
+# Test specific agent
+uv run pytest tests/test_agents/test_market_intelligence.py
+
+# With coverage
+uv run pytest --cov=app --cov-report=html
+```
+
+## 📈 Development Roadmap
+
+### ✅ Phase 1: MVP (Current)
+- Project structure
+- Configuration setup
+- Documentation
+
+### 🚧 Phase 2: Core Agents (In Progress)
+- Market Intelligence Officer
+- Quantitative Strategist
+- Basic workflow
+
+### 📋 Phase 3: Full System (Planned)
+- All 5 agents
+- Iterative refinement
+- PDF reports
+
+### 🚀 Phase 4: Production (Future)
+- Automated scheduling
+- Email distribution
+- Web dashboard
+
+**Full roadmap**: [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md)
+
+## 🤝 Contributing
+
+1. Read the [documentation](docs/INDEX.md)
+2. Create feature branch
+3. Implement with tests
+4. Update docs
+5. Submit PR
+
+## 📞 Support & Contact
+
+- **Documentation**: [docs/INDEX.md](docs/INDEX.md)
+- **Issues**: Open GitHub issue
+- **Email**: jason@aidatatools.com
+- **Blog**: [AIDATATOOLS Substack](https://aidatatools.substack.com)
+
+## 🔗 Resources
+
+- [CrewAI Docs](https://docs.crewai.com/)
+- [LangGraph Tutorial](https://langchain-ai.github.io/langgraph/)
+- [LangSmith](https://smith.langchain.com/)
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [Yahoo Finance API](https://github.com/ranaroussi/yfinance)
+
+## 📄 License
+
+[Add license here]
+
+---
+
+**Built with CrewAI, LangGraph, and FastAPI** | **Powered by OpenAI GPT-4o**

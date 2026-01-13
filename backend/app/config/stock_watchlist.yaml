@@ -1,0 +1,70 @@
+# Stock Watchlist Configuration
+# Define stocks to be analyzed in weekly reports
+
+stocks:
+  taiwan:
+    - symbol: "2330.TW"
+      name: "TSMC"
+      sector: "Semiconductors"
+
+    - symbol: "2454.TW"
+      name: "MediaTek"
+      sector: "Semiconductors"
+
+    - symbol: "2317.TW"
+      name: "Hon Hai (Foxconn)"
+      sector: "Electronics Manufacturing"
+
+  us:
+    - symbol: "NVDA"
+      name: "NVIDIA"
+      sector: "Semiconductors"
+
+    - symbol: "TSM"
+      name: "Taiwan Semiconductor (ADR)"
+      sector: "Semiconductors"
+
+    - symbol: "AAPL"
+      name: "Apple"
+      sector: "Consumer Electronics"
+
+    - symbol: "GOOGL"
+      name: "Alphabet (Google)"
+      sector: "Technology"
+
+# Report configuration
+report_config:
+  frequency: "weekly"
+  generation_day: "sunday"
+  generation_time: "18:00"
+  timezone: "Asia/Taipei"
+
+  # Email distribution
+  recipients:
+    - "jason@aidatatools.com"
+
+  # Report format
+  formats:
+    - pdf
+    - html
+    - json
+
+# Analysis parameters
+analysis_config:
+  # Historical data lookback period (days)
+  lookback_days: 30
+
+  # Technical indicators
+  indicators:
+    - MA5
+    - MA20
+    - MA60
+    - RSI14
+    - MACD
+    - BOLLINGER
+
+  # Sentiment analysis sources
+  sentiment_sources:
+    - news
+    # - twitter  # Future implementation
+    # - reddit   # Future implementation
