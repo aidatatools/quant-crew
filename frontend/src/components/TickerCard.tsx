@@ -1,4 +1,5 @@
 import { Database, Calendar, TrendingUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface TickerData {
   ticker: string;
@@ -13,6 +14,8 @@ interface TickerCardProps {
 }
 
 const TickerCard = ({ data, index }: TickerCardProps) => {
+  const navigate = useNavigate();
+
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', { 
@@ -22,10 +25,18 @@ const TickerCard = ({ data, index }: TickerCardProps) => {
     });
   };
 
+  const handleClick = () => {
+    navigate(`/ticker/${encodeURIComponent(data.ticker)}`);
+  };
+
   return (
     <div 
-      className="group relative overflow-hidden rounded-lg bg-card border border-border p-6 transition-all duration-300 hover:border-primary/50 card-glow"
+      className="group relative overflow-hidden rounded-lg bg-card border border-border p-6 transition-all duration-300 hover:border-primary/50 card-glow cursor-pointer"
       style={{ animationDelay: `${index * 100}ms` }}
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === 'Enter' && handleClick()}
     >
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

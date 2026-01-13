@@ -51,6 +51,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        chart: {
+          up: "hsl(var(--chart-up))",
+          down: "hsl(var(--chart-down))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

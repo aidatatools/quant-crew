@@ -36,6 +36,10 @@
 
     --radius: 0.75rem;
 
+    /* Chart colors */
+    --chart-up: 160 84% 45%;
+    --chart-down: 0 72% 55%;
+
     /* Custom tokens */
     --glow-primary: 0 0 20px hsl(187 100% 50% / 0.3);
     --glow-accent: 0 0 20px hsl(160 84% 45% / 0.3);
