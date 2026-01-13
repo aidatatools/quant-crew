@@ -31,6 +31,80 @@ tasks:
     cmds:
       - uv run uvicorn main:app --reload
 
+  # Database and data tasks
+  db:init:
+    desc: "Initialize database and fetch ticker data"
+    deps: [setup:backend]
+    dir: backend
+    cmds:
+      - uv run python scripts/init_db_and_fetch.py
+
+  db:migrate:
+    desc: "Run database migrations"
+    deps: [setup:backend]
+    dir: backend
+    cmds:
+      - uv run alembic upgrade head
+
+  db:migrate:rollback:
+    desc: "Rollback last database migration"
+    deps: [setup:backend]
+    dir: backend
+    cmds:
+      - uv run alembic downgrade -1
+
+  db:migrate:create:
+    desc: "Create a new database migration"
+    deps: [setup:backend]
+    dir: backend
+    cmds:
+      - uv run alembic revision --autogenerate -m "{{.CLI_ARGS}}"
+
+  data:fetch:
+    desc: "Fetch ticker data from Yahoo Finance"
+    deps: [setup:backend]
+    dir: backend
+    cmds:
+      - uv run python scripts/fetch_ticker_data.py
+
+  # Testing tasks
+  test:backend:
+    desc: "Run backend tests"
+    deps: [setup:backend]
+    dir: backend
+    cmds:
+      - uv run pytest
+
+  test:backend:cov:
+    desc: "Run backend tests with coverage"
+    deps: [setup:backend]
+    dir: backend
+    cmds:
+      - uv run pytest --cov=app --cov-report=html --cov-report=term
+
+  # Code quality tasks
+  lint:backend:
+    desc: "Lint backend code with ruff"
+    deps: [setup:backend]
+    dir: backend
+    cmds:
+      - uv run ruff check app/
+
+  format:backend:
+    desc: "Format backend code with black"
+    deps: [setup:backend]
+    dir: backend
+    cmds:
+      - uv run black app/
+
+  # Configuration demo
+  config:demo:
+    desc: "Run configuration system demo"
+    deps: [setup:backend]
+    dir: backend
+    cmds:
+      - uv run python examples/config_usage.py
+
   # Frontend tasks
   setup:frontend:
     desc: "Install frontend dependencies"
