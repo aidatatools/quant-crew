@@ -17,16 +17,20 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
 
     API_V1_PREFIX: str = "/api/v1"
-    SECRET_KEY: str = "your-secret-key-here-change-in-production"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     DATABASE_URL: str = "postgresql+asyncpg://user:password@localhost:5432/dbname"
-    REDIS_URL: str = "redis://localhost:6379/0"
+
+    TICKERS: str = "2330.TW,TSM,NVDA,GOOG"
 
     BACKEND_CORS_ORIGINS: list[str] = [
-        "http://localhost:3000",
+        "http://localhost:8080",
         "http://localhost:8000",
     ]
+
+    @property
+    def ticker_list(self) -> list[str]:
+        """Convert comma-separated tickers string to list."""
+        return [ticker.strip() for ticker in self.TICKERS.split(",")]
 
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
     @classmethod

@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 
-version: '3'
+version: "3"
 
 vars:
   GREETING: Hello, world!
@@ -22,12 +22,44 @@ tasks:
       - pyproject.toml
       - uv.lock
     generates:
-      - .venv/pyvenv.cfg  # Tells Task the venv is now "ready"
+      - .venv/pyvenv.cfg # Tells Task the venv is now "ready"
 
-  # The run task depends on setup being done
   run:backend:
     desc: "Start FastAPI"
     deps: [setup:backend]
     dir: backend
     cmds:
       - uv run uvicorn main:app --reload
+
+  # Frontend tasks
+  setup:frontend:
+    desc: "Install frontend dependencies"
+    dir: frontend
+    cmds:
+      - npm install
+    sources:
+      - package.json
+      - package-lock.json
+    generates:
+      - node_modules/.package-lock.json
+
+  run:frontend:
+    desc: "Start frontend development server"
+    deps: [setup:frontend]
+    dir: frontend
+    cmds:
+      - npm run dev
+
+  # Run both backend and frontend in parallel
+  run:dev:
+    desc: "Start both backend and frontend in parallel"
+    deps: [setup:backend, setup:frontend]
+    cmds:
+      - task --parallel run:backend run:frontend
+
+  # Sync frontend from quant-crew-ui to quant-crew/frontend
+  sync:frontend:
+    desc: "Sync frontend from ~/workspace/quant-crew-ui to frontend/"
+    cmds:
+      - rsync -av --delete --exclude 'node_modules' --exclude '.next' --exclude '.git' --exclude 'dist' --exclude 'build' ~/workspace/quant-crew-ui/ frontend/
+      - echo "✓ Frontend synced from ~/workspace/quant-crew-ui to frontend/"

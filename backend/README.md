@@ -1,13 +1,11 @@
 # FastAPI Backend
 
-A modern FastAPI backend application with PostgreSQL, Redis, and async support, managed with `uv`.
+A modern FastAPI backend application with PostgreSQL and async support, managed with `uv`.
 
 ## Features
 
 - FastAPI framework with async/await support
 - PostgreSQL database with SQLAlchemy 2.0
-- Redis for caching
-- JWT authentication utilities
 - Pydantic v2 for data validation
 - Alembic for database migrations
 - Environment-based configuration
@@ -23,7 +21,6 @@ A modern FastAPI backend application with PostgreSQL, Redis, and async support, 
 - Python 3.11+
 - [uv](https://github.com/astral-sh/uv) package manager
 - PostgreSQL (optional, for database features)
-- Redis (optional, for caching)
 
 ### Installation
 
@@ -198,6 +195,4 @@ See [.env.example](.env.example) for all available configuration options.
 
 Key variables:
 - `DATABASE_URL` - PostgreSQL connection string
-- `REDIS_URL` - Redis connection string
-- `SECRET_KEY` - JWT secret key (change in production!)
 - `BACKEND_CORS_ORIGINS` - Allowed CORS origins
